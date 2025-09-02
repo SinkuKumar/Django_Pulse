@@ -1,0 +1,68 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block title %}Pulse Login{%endblock %} 
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <main class="form-signin w-100" style="max-width: 400px">
+    <form method="post" action="{% url 'login' %}" class="border border-primary border-2 rounded p-3">
+      {% csrf_token %}
+      <img
+        class="mb-4 mx-auto d-block"
+        src="{% static 'svg/brand/Pulse.svg' %}"
+        alt="Pulse"
+        height="58"
+        />
+      <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+
+      {% if form.errors %}
+      <div class="alert alert-danger">Invalid username or password.</div>
+      {% endif %}
+
+      {% if error %}
+      <div class="alert alert-danger">Invalid username or password.</div>
+      {% endif %}
+
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          name="username"
+          id="floatingInput"
+          placeholder="username"
+          required
+        />
+        <label for="floatingInput">Username</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          id="floatingPassword"
+          placeholder="Password"
+          required
+        />
+        <label for="floatingPassword">Password</label>
+      </div>
+
+      <div class="form-check text-start my-3">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          name="remember_me"
+          id="checkDefault"
+        />
+        <label class="form-check-label" for="checkDefault"> Remember me </label>
+      </div>
+
+      <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+      <p class="mt-5 mb-3 text-body-secondary text-center">
+        &copy; Sinku Kumar
+      </p>
+    </form>
+  </main>
+</div>
+{% endblock %}
