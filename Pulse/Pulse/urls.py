@@ -23,5 +23,6 @@ urlpatterns = [
     path('app/', include('app.urls')),
     path('app/home/', include('home.urls')),
     path('app/tasks/', include('tasks.urls')),
+    path('app/projects/', include('projects.urls')),
     path('admin/', admin.site.urls),
 ]

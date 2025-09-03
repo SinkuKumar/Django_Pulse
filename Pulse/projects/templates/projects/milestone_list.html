@@ -1,0 +1,33 @@
+{% extends 'app/app.html' %} 
+{% block title %}Milestones{% endblock %}
+
+{% block main %}
+<h2>Milestones for {{ project.name }}</h2>
+<a href="{% url 'projects:milestone_create' project.pk %}" class="btn btn-primary">Add Milestone</a>
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Responsible</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for milestone in object_list %}
+        <tr>
+            <td>{{ milestone.title }}</td>
+            <td>{{ milestone.status.name if milestone.status else 'N/A' }}</td>
+            <td>{{ milestone.due_date }}</td>
+            <td>{{ milestone.responsible.username if milestone.responsible else '-' }}</td>
+            <td>
+                <a href="{% url 'projects:milestone_update' milestone.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No milestones found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

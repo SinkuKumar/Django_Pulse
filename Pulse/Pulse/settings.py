@@ -45,6 +45,7 @@ LOCAL_APPS = [
     'app',
     'home',
     'tasks',
+    'projects',
 ]
 
 THIRD_PARTY_APPS = [

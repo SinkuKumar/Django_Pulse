@@ -5,25 +5,52 @@
 
 {% block extra_head %}
 <style>
-  @media (min-width: 768px) {
-    #layout {
-      display: flex;
-    }
-    #sidebar {
-      width: 250px;
-      flex-shrink: 0;
-      background: #f8f9fa;
-      border-right: 1px solid #ddd;
-      padding: 1rem;
-      height: calc(100vh - 56px);
-      position: sticky;
-      top: 56px;
-    }
-    #content {
-      flex-grow: 1;
-      padding: 1rem;
-    }
+/* Desktop Layout */
+@media (min-width: 768px) {
+  html, body {
+    height: 100%;
+    margin: 0;
   }
+
+  /* Main flex container */
+  #layout {
+    display: flex;
+    height: calc(100vh - 56px); /* Subtract navbar height */
+    overflow: hidden;           /* Prevent whole-page scrolling */
+  }
+
+  /* Sidebar */
+  #sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: #f8f9fa;
+    border-right: 1px solid #ddd;
+    padding: 1rem;
+    overflow-y: auto;           /* Scroll independently */
+    min-height: 0;              /* Critical for flexbox scrolling */
+  }
+
+  /* Main content */
+  #content {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;           /* Scroll independently */
+    min-height: 0;              /* Critical for flexbox scrolling */
+  }
+}
+
+/* Navbar stays sticky */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+#content {
+  height: calc(100% - 60px); /* Adjust if you have other elements above table */
+  overflow-y: auto;
+}
+
 </style>
 
 {% endblock %}
@@ -31,11 +58,13 @@
 {% block content %}
 
 <!-- Navbar -->
-<nav class="navbar navbar-light bg-light d-flex justify-content-between px-3">
+<nav class="navbar navbar-light bg-light d-flex justify-content-between px-3 sticky-top">
   <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-label="Open menu">
     ☰
   </button>
-  <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'svg/brand/Pulse_Full.svg' %}" alt="Pulse Logo" height="48px"></a>
+  <a class="navbar-brand" href="{% url 'home' %}">
+    <img src="{% static 'svg/brand/Pulse_Full.svg' %}" alt="Pulse Logo" height="48px">
+  </a>
   {% if request.user.is_authenticated %}
     <form class="mb-0" action="{% url 'logout' %}" method="post">
       {% csrf_token %}
@@ -52,17 +81,19 @@
   <aside id="sidebar" class="d-none d-md-block">
     <ul class="list-unstyled">
       <li><a href="{% url 'home' %}" class="text-decoration-none">Home</a></li>
-      <li><a href="{% url 'tasks' %}" class="text-decoration-none">Tasks</a></li>
+      <li><a href="{% url 'task_list' %}" class="text-decoration-none">Tasks</a></li>
     </ul>
   </aside>
 
   <!-- Main Content -->
-  {% block main %}
   <main id="content">
+    {% block main %}
+
     <h1>Main Content</h1>
     <p>This is where your main page content will go.</p>
+
+    {% endblock %}
   </main>
-  {% endblock %}
 </div>
 
 <!-- Offcanvas Sidebar for mobile -->
@@ -73,7 +104,7 @@
   <div class="offcanvas-body">
     <ul class="list-unstyled">
       <li><a href="{% url 'home' %}" class="text-decoration-none">Home</a></li>
-      <li><a href="{% url 'tasks' %}" class="text-decoration-none">Tasks</a></li>
+      <li><a href="{% url 'task_list' %}" class="text-decoration-none">Tasks</a></li>
     </ul>
   </div>
 </div>
