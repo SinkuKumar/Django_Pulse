@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,7 +40,7 @@ INSTALLED_APPS = [
 
 LOCAL_APPS = [
     'product',
-    'users',
+    'profiles',
     'app',
     'home',
     'tasks',
@@ -127,16 +126,28 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = Path(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'app/'  # where to redirect after login
-LOGOUT_REDIRECT_URL = '/users/login/'  # where to redirect after logout
+LOGIN_REDIRECT_URL = '/'  # where to redirect after login
+LOGOUT_REDIRECT_URL = '/'  # where to redirect after logout
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sudosinku@gmail.com'
+EMAIL_HOST_PASSWORD = 'ryllhtmxnebnwbgp'
+DEFAULT_FROM_EMAIL = 'sudosinku@gmail.com'

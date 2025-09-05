@@ -1,148 +1,43 @@
 {% extends 'app/app.html' %} 
 {% load static %} 
 
-{% block title %}Pulse Home{%endblock %}
+{% block title %}Pulse Home{%endblock %} 
 
 {% block main %}
-
-<!--
-<div>
-  <!-- Create Task Button -->
-  <button
-    class="btn btn-primary mb-3"
-    data-bs-toggle="modal"
-    data-bs-target="#createTaskModal"
-  >
-    Create Task
-  </button>
-
-  <!-- Tasks Table -->
-  <table class="table table-hover table-bordered">
-    <thead class="table-light">
-      <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Priority</th>
-        <th>Assigned To</th>
-        <th>Due Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for task in tasks %}
-      <tr
-        data-bs-toggle="modal"
-        data-bs-target="#taskDetailModal{{ task.id }}"
-        style="cursor: pointer"
-      >
-        <td>{{ task.title }}</td>
-        <td>{{ task.status.name }}</td>
-        <td>{{ task.priority.name }}</td>
-        <td>
-          {% if task.assigned_to %} {{ task.assigned_to.username }} {% else %}
-          Unassigned {% endif %}
-        </td>
-        <td>{{ task.due_date|date:"Y-m-d H:i" }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<ul class="nav justify-content-end">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{% url 'task_table' %}">
+      <i class="bi bi-table me-1"></i> Table View
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'task_kanban' %}">
+      <i class="bi bi-kanban me-1"></i> Kanban Board
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'task_gantt' %}">
+      <i class="bi bi-calendar3 me-1"></i> Gantt Chart
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="bi bi-sliders2"></i> Preferences
+    </a>
+  </li>
+</ul>
+{% block tasks %}
+<div class="container">
+  <h2>Welcome to Pulse Tasks</h2>
+  <p>
+    This is a placeholder tasks. Use the navigation above to switch between
+    different views:
+  </p>
+  <ul>
+    <li><strong>Table View:</strong> Explore data in tabular format.</li>
+    <li><strong>Kanban Board:</strong> Manage tasks visually with cards.</li>
+    <li><strong>Gantt Chart:</strong> Track schedules and deadlines.</li>
+  </ul>
 </div>
-
-<!-- Create Task Modal -->
-<div class="modal fade" id="createTaskModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form method="POST" action="{% url 'task_create' %}">
-        {% csrf_token %}
-        <div class="modal-header">
-          <h5 class="modal-title">Create Task</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-          ></button>
-        </div>
-        <div class="modal-body">{{ form.as_p }}</div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Save Task</button>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- Task Detail Modals -->
-{% for task in tasks %}
-<div
-  class="modal fade"
-  id="taskDetailModal{{ task.id }}"
-  tabindex="-1"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">{{ task.title }}</h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="row mb-2">
-          <div class="col-md-6">
-            <strong>Status:</strong> {{ task.status.name }}
-          </div>
-          <div class="col-md-6">
-            <strong>Priority:</strong> {{ task.priority.name }}
-          </div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-md-6">
-            <strong>Assigned To:</strong>
-            {% if task.assigned_to %} {{ task.assigned_to.username }} {% else %}
-            Unassigned {% endif %}
-          </div>
-          <div class="col-md-6">
-            <strong>Due Date:</strong> {{ task.due_date|date:"Y-m-d H:i" }}
-          </div>
-        </div>
-        <hr />
-        <div>
-          <strong>Description:</strong>
-          <p>{{ task.description }}</p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        {% if not task.is_resolved %}
-        <form
-          method="POST"
-          action="{% url 'task_resolve' task.id %}"
-          style="display: inline"
-        >
-          {% csrf_token %}
-          <button type="submit" class="btn btn-success">
-            Mark as Resolved
-          </button>
-        </form>
-        {% else %}
-        <span class="badge bg-success me-auto">Resolved</span>
-        {% endif %}
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-{% endfor %}
-
+{% endblock %}
 {% endblock %}

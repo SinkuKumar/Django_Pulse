@@ -1,0 +1,61 @@
+{% extends 'tasks/tasks.html' %} 
+{% load static %} 
+
+{% block tasks %}
+<div class="container mt-4">
+    <table id="taskTable" class="display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Created By</th>
+                <th>Assigned To</th>
+                <th>Created At</th>
+                <th>Due Date</th>
+                <th>Resolved</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.status.name }}</td>
+                <td>{{ task.priority.name }} ({{ task.priority.level }})</td>
+                <td>{{ task.created_by.username }}</td>
+                <td>{{ task.assigned_to.username|default:"Unassigned" }}</td>
+                <td>{{ task.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    {% if task.due_date %}
+                        {{ task.due_date|date:"Y-m-d H:i" }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if task.is_resolved %}
+                        ✅
+                    {% else %}
+                        ❌
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <script>
+        $(document).ready(function() {
+            $('#taskTable').DataTable({
+                responsive: true,
+                dom: 'Bfrtip',  // Buttons + Search + Pagination layout
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                ],
+                pageLength: 10,
+                ordering: true,
+                searching: true
+            });
+        });
+    </script>
+{% endblock %}

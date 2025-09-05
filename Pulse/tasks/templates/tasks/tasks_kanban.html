@@ -1,0 +1,48 @@
+{% extends 'tasks/tasks.html' %} 
+{% load static %} 
+
+{% block tasks %}
+    <div class="kanban-board">
+        {% for status, tasks in status_tasks.items %}
+            <div class="kanban-column" data-status="{{ status.id }}">
+                <h2>{{ status.name }}</h2>
+                {% for task in tasks %}
+                    <div class="task-card" draggable="true" data-id="{{ task.id }}">
+                        <strong>{{ task.title }}</strong><br>
+                        <small>Priority: {{ task.priority.name }}</small><br>
+                        <small>Assigned: {{ task.assigned_to.username|default:"Unassigned" }}</small>
+                    </div>
+                {% empty %}
+                    <p style="text-align:center; color: #777;">No tasks</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Simple drag-and-drop
+        document.querySelectorAll('.task-card').forEach(card => {
+            card.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', card.dataset.id);
+                e.dataTransfer.effectAllowed = "move";
+            });
+        });
+
+        document.querySelectorAll('.kanban-column').forEach(column => {
+            column.addEventListener('dragover', e => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+            });
+
+            column.addEventListener('drop', e => {
+                e.preventDefault();
+                const taskId = e.dataTransfer.getData('text/plain');
+                const card = document.querySelector(`[data-id='${taskId}']`);
+                column.appendChild(card);
+
+                // TODO: AJAX call to update task status in backend
+                console.log("Task", taskId, "moved to status", column.dataset.status);
+            });
+        });
+    </script>
+{% endblock %}
